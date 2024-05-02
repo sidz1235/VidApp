@@ -10,12 +10,12 @@ import re
 import speech_recognition as sr
 #from dotenv import load_dotenv
 from openai import OpenAI
-from postgresdb import insert_data
+#from postgresdb import insert_data
 
 #load_dotenv()
 
 #api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key="OPENAI_API_KEY")
+client = OpenAI(api_key="KEY")
 
 def generate_response(user_input):
     response = client.chat.completions.create(
@@ -183,14 +183,8 @@ def process_video(video_path):
     cv2.destroyAllWindows()
 
     return eye_detection_percentage
-import time
-x=10
-y=8111111111
-def compute(video_path,countrycode=x+1,mobilenum=y+1):
+def compute(video_path):
     try:
-        start_time = time.time()
-        #print(video)
-        print('started')
         with open(video_path, "rb") as video:
             with tempfile.NamedTemporaryFile(delete=False) as temp_file:
                 temp_file.write(video.read())
@@ -248,24 +242,7 @@ def compute(video_path,countrycode=x+1,mobilenum=y+1):
             pause_feed = "LONG"
         else:
             pause_feed = "GREAT"
-        databasedata={
-            "Country_Code": int(countrycode),
-            'Mobile_Number': int(mobilenum),
-            "Duration": int(duration_vid),
-            "Total_Words": words,
-            'Filler_Words_Per_Minute': wpm,
-            'Average_Words_Per_Minute': avg_words,
-            'Fillers_Per_Minute': fpm,
-            'Average_Fillers_Per_Minute': avg_fillers,
-            'Eye_Contact_Percentage': round(eye_contact,2),
-            'Num_Pauses': num_pauses,
-            'Total_Pause_Time': round(total_pause_time, 2),
-            'Soft_Voices_Percentage': round(soft_p,2),
-            'Medium_Voices_Percentage': round(medium_p,2),
-            'High_Voices_Percentage': round(high_p,2),
-
-        }
-        insert_data(databasedata)
+       
         
         data = {
             "Duration": str(duration_vid)+" s",
@@ -303,9 +280,7 @@ def compute(video_path,countrycode=x+1,mobilenum=y+1):
             }
         }
 
-        end_time = time.time()
-        duration = end_time - start_time
-        return data, duration
+        return data
     
     except Exception as e:
         print(e)
